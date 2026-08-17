@@ -1,0 +1,8 @@
+venv/
+.venv/
+.swarm_venv/
+*.pyd
+.env
+Axis/.env
+__pycache__/
+*.pyc
