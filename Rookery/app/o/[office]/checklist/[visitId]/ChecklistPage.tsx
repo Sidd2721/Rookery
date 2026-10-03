@@ -79,6 +79,17 @@ export default function ChecklistPage({ officeId, visitId }: ChecklistPageProps)
           const svc = sData.find((s: Service) => s.id === vData.service_id);
           if (svc) setService(svc);
         }
+
+        // Merge API state with any pending local state
+        const local = localStorage.getItem(`tayar-ticks-${visitId}`);
+        if (local) {
+          try {
+            const parsed = JSON.parse(local);
+            if (Array.isArray(parsed)) {
+              setChecked(new Set([...vData.items_checked, ...parsed]));
+            }
+          } catch {}
+        }
       } catch {
         setError(true);
       }
@@ -109,6 +120,9 @@ export default function ChecklistPage({ officeId, visitId }: ChecklistPageProps)
       const next = new Set(prev);
       if (isChecked) next.add(id);
       else next.delete(id);
+      
+      const arr = Array.from(next);
+      localStorage.setItem(`tayar-ticks-${visitId}`, JSON.stringify(arr));
       patchChecked(next);
       return next;
     });

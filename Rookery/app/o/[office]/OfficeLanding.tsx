@@ -133,7 +133,7 @@ export default function OfficeLanding({ officeId }: OfficeLandingProps) {
             {lang === 'mr' ? 'तुम्हाला काय हवे आहे?' : 'What do you need?'}
           </h2>
 
-          <div className="flex gap-2 mb-6">
+          <div className="flex flex-col sm:flex-row gap-2 mb-6">
             <input
               id="need-input"
               type="text"
