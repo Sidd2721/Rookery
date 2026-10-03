@@ -204,16 +204,6 @@ export default function TicketPage({ officeId, visitId }: TicketPageProps) {
           {lang === 'mr' ? 'हे पान दर ४ सेकंदांनी अद्ययावत होते.' : 'This page updates every 4 seconds.'}
         </p>
       </div>
-
-      <style jsx>{`
-        @keyframes pulse-once {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
-          50% { box-shadow: 0 0 0 8px rgba(79, 70, 229, 0.15); }
-        }
-        .animate-pulse-once {
-          animation: pulse-once 600ms ease-out 1;
-        }
-      `}</style>
     </div>
   );
 }

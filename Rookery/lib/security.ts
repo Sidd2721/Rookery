@@ -1,38 +1,49 @@
-// In-memory rate limiter for PIN attempts
-const attempts: Record<string, { count: number; firstAttempt: number }> = {};
+// In-memory rate limiter — tracks FAILED PIN attempts only
+const failedAttempts: Record<string, { count: number; firstAttempt: number }> = {};
 
-export function checkPinRateLimit(ip: string): boolean {
+/**
+ * Call AFTER verifyPin when the PIN is wrong.
+ * Returns false (→ 429) if this IP has 5+ failures in 5 minutes.
+ */
+export function recordFailedPin(ip: string): boolean {
   const now = Date.now();
-  const record = attempts[ip];
-  
+  const record = failedAttempts[ip];
+
   if (!record) {
-    attempts[ip] = { count: 1, firstAttempt: now };
-    return true;
+    failedAttempts[ip] = { count: 1, firstAttempt: now };
+    return true; // first failure, still allowed
   }
-  
+
   if (now - record.firstAttempt > 5 * 60 * 1000) {
-    // Reset after 5 minutes
-    attempts[ip] = { count: 1, firstAttempt: now };
+    failedAttempts[ip] = { count: 1, firstAttempt: now };
     return true;
   }
-  
-  if (record.count >= 5) {
-    return false; // Rate limited
-  }
-  
+
   record.count += 1;
-  return true;
+  return record.count <= 5; // false = rate limited
+}
+
+export function clearFailedPin(ip: string): void {
+  delete failedAttempts[ip];
+}
+
+export function isIpLocked(ip: string): boolean {
+  const now = Date.now();
+  const record = failedAttempts[ip];
+  if (!record) return false;
+  if (now - record.firstAttempt > 5 * 60 * 1000) return false;
+  return record.count >= 5;
 }
 
 export function verifyPin(pin: string): boolean {
   const expected = process.env.CLERK_PIN || '';
   if (!pin || !expected) return false;
-  
-  // Constant time comparison (simple version)
+
+  // Constant-time comparison
   let diff = expected.length ^ pin.length;
   for (let i = 0; i < expected.length && i < pin.length; i++) {
     diff |= expected.charCodeAt(i) ^ pin.charCodeAt(i);
   }
-  
+
   return diff === 0;
 }

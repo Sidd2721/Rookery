@@ -67,3 +67,12 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Token card pulse — fires once when status becomes "serving" */
+@keyframes pulse-once {
+  0%, 100% { box-shadow: 0 4px 6px -1px rgba(0,0,0,.07), 0 0 0 0 rgba(79,70,229,0); }
+  50%       { box-shadow: 0 4px 6px -1px rgba(0,0,0,.07), 0 0 0 10px rgba(79,70,229,.12); }
+}
+.animate-pulse-once {
+  animation: pulse-once 700ms ease-out 1;
+}

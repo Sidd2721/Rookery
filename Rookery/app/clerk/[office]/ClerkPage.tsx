@@ -88,26 +88,25 @@ export default function ClerkPage({ officeId }: ClerkPageProps) {
   const handlePinSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setPinError('');
-    const res = await fetch('/api/queue?office_id=' + officeId, {
-      headers: { 'x-clerk-pin': pinInput },
-    });
-    // We verify PIN by trying a clerk action
-    const testRes = await fetch('/api/clerk/call-next', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-clerk-pin': pinInput,
-      },
-      body: JSON.stringify({ office_id: officeId }),
-    });
-    if (testRes.status === 401) {
-      setPinError(lang === 'mr' ? 'चुकीचा पिन' : 'Wrong PIN');
-      return;
+    try {
+      const res = await fetch('/api/clerk/verify', {
+        method: 'POST',
+        headers: { 'x-clerk-pin': pinInput },
+      });
+      if (res.status === 401) {
+        setPinError(lang === 'mr' ? 'चुकीचा पिन' : 'Wrong PIN');
+        return;
+      }
+      if (res.status === 429) {
+        setPinError(lang === 'mr' ? 'खूप जास्त प्रयत्न. ५ मिनिटे थांबा.' : 'Too many attempts. Wait 5 minutes.');
+        return;
+      }
+      sessionStorage.setItem('tayar-clerk-pin', pinInput);
+      setPin(pinInput);
+      await fetchQueue(pinInput);
+    } catch {
+      setPinError(lang === 'mr' ? 'नेटवर्क त्रुटी' : 'Network error');
     }
-    // Accept any non-401 (409 = no_ready_visits is fine, means PIN is correct)
-    sessionStorage.setItem('tayar-clerk-pin', pinInput);
-    setPin(pinInput);
-    await fetchQueue(pinInput);
   };
 
   const clerkFetch = async (path: string, body: object) => {
