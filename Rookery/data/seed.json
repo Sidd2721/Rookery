@@ -1,0 +1,153 @@
+{
+  "_comment": "DEMO DATA. Marathi text needs native-speaker review. Replace with items copied from the office's published list.",
+  "offices": [
+    {
+      "id": "demo-ward",
+      "name_mr": "डेमो प्रभाग कार्यालय",
+      "name_en": "Demo Ward Office"
+    }
+  ],
+  "services": [
+    {
+      "id": "income-cert",
+      "office_id": "demo-ward",
+      "name_mr": "उत्पन्नाचा दाखला",
+      "name_en": "Income certificate",
+      "duration_min": 10,
+      "checklist": [
+        {
+          "id": "aadhaar-copy",
+          "label_mr": "आधार कार्ड (झेरॉक्स)",
+          "label_en": "Aadhaar card (photocopy)",
+          "how_mr": "कार्यालयाजवळील झेरॉक्स दुकानात",
+          "how_en": "Photocopy shop near the office"
+        },
+        {
+          "id": "photo",
+          "label_mr": "पासपोर्ट साईज फोटो",
+          "label_en": "Passport-size photo",
+          "how_mr": "तुमच्या जवळील फोटो स्टुडिओमध्ये",
+          "how_en": "At a photo studio near you"
+        },
+        {
+          "id": "declaration",
+          "label_mr": "स्वाक्षरी केलेले स्वयंघोषणापत्र",
+          "label_en": "Signed self-declaration form",
+          "how_mr": "मदत कक्षात विचारा",
+          "how_en": "Ask at the help desk"
+        },
+        {
+          "id": "address-proof",
+          "label_mr": "पत्त्याचा पुरावा",
+          "label_en": "Address proof",
+          "how_mr": "वीज बिल किंवा रेशन कार्ड",
+          "how_en": "Electricity bill or Ration card"
+        }
+      ]
+    },
+    {
+      "id": "birth-cert",
+      "office_id": "demo-ward",
+      "name_mr": "जन्म दाखला",
+      "name_en": "Birth certificate",
+      "duration_min": 8,
+      "checklist": [
+        {
+          "id": "aadhaar-copy",
+          "label_mr": "आधार कार्ड (झेरॉक्स)",
+          "label_en": "Aadhaar card (photocopy)",
+          "how_mr": "कार्यालयाजवळील झेरॉक्स दुकानात",
+          "how_en": "Photocopy shop near the office"
+        },
+        {
+          "id": "hospital-record",
+          "label_mr": "रुग्णालयातील जन्माची नोंद",
+          "label_en": "Hospital birth record",
+          "how_mr": "संबंधित रुग्णालयातून मिळवा",
+          "how_en": "Get from the respective hospital"
+        },
+        {
+          "id": "declaration",
+          "label_mr": "स्वाक्षरी केलेले स्वयंघोषणापत्र",
+          "label_en": "Signed self-declaration form",
+          "how_mr": "मदत कक्षात विचारा",
+          "how_en": "Ask at the help desk"
+        },
+        {
+          "id": "address-proof",
+          "label_mr": "पत्त्याचा पुरावा",
+          "label_en": "Address proof",
+          "how_mr": "वीज बिल किंवा रेशन कार्ड",
+          "how_en": "Electricity bill or Ration card"
+        }
+      ]
+    },
+    {
+      "id": "ration-update",
+      "office_id": "demo-ward",
+      "name_mr": "रेशन कार्ड अद्ययावत",
+      "name_en": "Ration card update",
+      "duration_min": 12,
+      "checklist": [
+        {
+          "id": "old-ration",
+          "label_mr": "जुने रेशन कार्ड",
+          "label_en": "Old Ration card",
+          "how_mr": "तुमच्या घरातील जुनी प्रत",
+          "how_en": "Old copy from your house"
+        },
+        {
+          "id": "aadhaar-copy",
+          "label_mr": "आधार कार्ड (झेरॉक्स)",
+          "label_en": "Aadhaar card (photocopy)",
+          "how_mr": "कार्यालयाजवळील झेरॉक्स दुकानात",
+          "how_en": "Photocopy shop near the office"
+        },
+        {
+          "id": "address-proof",
+          "label_mr": "पत्त्याचा पुरावा",
+          "label_en": "Address proof",
+          "how_mr": "नवीन घर असल्यास त्याचा पुरावा",
+          "how_en": "Proof if new house"
+        },
+        {
+          "id": "declaration",
+          "label_mr": "स्वाक्षरी केलेले स्वयंघोषणापत्र",
+          "label_en": "Signed self-declaration form",
+          "how_mr": "मदत कक्षात विचारा",
+          "how_en": "Ask at the help desk"
+        }
+      ]
+    },
+    {
+      "id": "tax-copy",
+      "office_id": "demo-ward",
+      "name_mr": "मालमत्ता कर पावतीची प्रत",
+      "name_en": "Property tax receipt copy",
+      "duration_min": 6,
+      "checklist": [
+        {
+          "id": "property-no",
+          "label_mr": "मालमत्ता क्रमांक (इंडेक्स २)",
+          "label_en": "Property number (Index 2)",
+          "how_mr": "तुमच्या जुन्या पावतीवर असेल",
+          "how_en": "Available on your old receipt"
+        },
+        {
+          "id": "aadhaar-copy",
+          "label_mr": "आधार कार्ड (झेरॉक्स)",
+          "label_en": "Aadhaar card (photocopy)",
+          "how_mr": "कार्यालयाजवळील झेरॉक्स दुकानात",
+          "how_en": "Photocopy shop near the office"
+        },
+        {
+          "id": "declaration",
+          "label_mr": "स्वाक्षरी केलेले स्वयंघोषणापत्र",
+          "label_en": "Signed self-declaration form",
+          "how_mr": "मदत कक्षात विचारा",
+          "how_en": "Ask at the help desk"
+        }
+      ]
+    }
+  ]
+}
