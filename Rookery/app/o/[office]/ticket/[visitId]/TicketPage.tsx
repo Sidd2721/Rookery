@@ -49,6 +49,7 @@ export default function TicketPage({ officeId, visitId }: TicketPageProps) {
   const [lang, setLang] = useState<'mr' | 'en'>('en');
   const [visit, setVisit] = useState<VisitData | null>(null);
   const [error, setError] = useState(false);
+  const [offline, setOffline] = useState(false);
   const [prevStatus, setPrevStatus] = useState<string | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const isFirst = useRef(true);
@@ -66,8 +67,9 @@ export default function TicketPage({ officeId, visitId }: TicketPageProps) {
   const fetchVisit = useCallback(async () => {
     try {
       const res = await fetch(`/api/visits/${visitId}`);
-      if (!res.ok) { setError(true); return; }
+      if (!res.ok) { if (isFirst.current) setError(true); return; }
       const data: VisitData = await res.json();
+      setOffline(false);
       setVisit(prev => {
         if (prev) setPrevStatus(prev.status);
         return data;
@@ -75,6 +77,7 @@ export default function TicketPage({ officeId, visitId }: TicketPageProps) {
       isFirst.current = false;
     } catch {
       if (isFirst.current) setError(true);
+      else setOffline(true); // poll failure — show reconnecting banner
     }
   }, [visitId]);
 
@@ -116,6 +119,15 @@ export default function TicketPage({ officeId, visitId }: TicketPageProps) {
   return (
     <div className="flex flex-col min-h-screen">
       <DemoBanner lang={lang} />
+
+      {/* Offline reconnecting banner */}
+      {offline && (
+        <div className="w-full bg-amber-100 border-b border-amber-300 px-4 py-1.5 text-center" role="status">
+          <p className="text-xs text-amber-800 font-medium">
+            {lang === 'mr' ? 'कनेक्शन तुटले — पुन्हा प्रयत्न होत आहे…' : 'Connection lost — retrying…'}
+          </p>
+        </div>
+      )}
 
       <div className="w-full max-w-md mx-auto px-4 py-6 flex flex-col flex-1">
         {/* Header */}

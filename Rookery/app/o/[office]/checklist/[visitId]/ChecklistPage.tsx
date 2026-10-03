@@ -43,6 +43,7 @@ export default function ChecklistPage({ officeId, visitId }: ChecklistPageProps)
   const [service, setService] = useState<Service | null>(null);
   const [checked, setChecked] = useState<Set<string>>(new Set());
   const [error, setError] = useState(false);
+  const [offline, setOffline] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -90,12 +91,16 @@ export default function ChecklistPage({ officeId, visitId }: ChecklistPageProps)
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(async () => {
       try {
-        await fetch(`/api/visits/${visitId}`, {
+        const res = await fetch(`/api/visits/${visitId}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ items_checked: Array.from(newChecked) }),
         });
-      } catch {}
+        if (res.ok) setOffline(false);
+        else setOffline(true);
+      } catch {
+        setOffline(true);
+      }
     }, 400);
   }, [visitId]);
 
@@ -164,6 +169,14 @@ export default function ChecklistPage({ officeId, visitId }: ChecklistPageProps)
   return (
     <div className="flex flex-col min-h-screen">
       <DemoBanner lang={lang} />
+
+      {offline && (
+        <div className="w-full bg-amber-100 border-b border-amber-300 px-4 py-1.5 text-center" role="status">
+          <p className="text-xs text-amber-800 font-medium">
+            {lang === 'mr' ? 'कनेक्शन तुटले — ऑफलाइन जतन केले जात आहे…' : 'Connection lost — saving offline…'}
+          </p>
+        </div>
+      )}
 
       <div className="w-full max-w-md mx-auto px-4 py-6 flex flex-col flex-1">
         {/* Header */}

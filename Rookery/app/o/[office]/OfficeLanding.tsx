@@ -33,7 +33,8 @@ export default function OfficeLanding({ officeId }: OfficeLandingProps) {
   const [error, setError] = useState(false);
   const [needle, setNeedle] = useState('');
   const [confirmed, setConfirmed] = useState<Service | null>(null);
-  const [showAll, setShowAll] = useState(false);
+  const [showAll, setShowAll] = useState(true);
+  const [noMatch, setNoMatch] = useState(false);
   const [finding, setFinding] = useState(false);
   const [creating, setCreating] = useState(false);
 
@@ -63,11 +64,12 @@ export default function OfficeLanding({ officeId }: OfficeLandingProps) {
 
   const handleFind = async () => {
     const trimmed = needle.trim();
-    if (!trimmed) { setShowAll(true); setConfirmed(null); return; }
+    if (!trimmed) { setShowAll(true); setConfirmed(null); setNoMatch(false); return; }
 
     setFinding(true);
     setConfirmed(null);
     setShowAll(false);
+    setNoMatch(false);
 
     try {
       const res = await fetch('/api/map-need', {
@@ -81,9 +83,11 @@ export default function OfficeLanding({ officeId }: OfficeLandingProps) {
         if (found) {
           setConfirmed(found);
         } else {
+          setNoMatch(true);
           setShowAll(true);
         }
       } else {
+        setNoMatch(true);
         setShowAll(true);
       }
     } catch {
@@ -182,6 +186,17 @@ export default function OfficeLanding({ officeId }: OfficeLandingProps) {
                   {lang === 'mr' ? 'नाही, सर्व दाखवा' : 'No, show all'}
                 </button>
               </div>
+            </div>
+          )}
+
+          {/* No match message */}
+          {noMatch && (
+            <div className="mb-4 rounded-[12px] bg-amber-50 border border-amber-200 p-4 transition-all duration-200" role="status">
+              <p className="text-sm font-medium text-amber-800">
+                {lang === 'mr'
+                  ? 'आम्हाला तंतोतंत जुळणारी सेवा आढळली नाही. कृपया खालील यादीतून निवडा.'
+                  : 'We couldn\'t find an exact match. Please choose from the list below.'}
+              </p>
             </div>
           )}
         </section>
