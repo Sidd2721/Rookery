@@ -1,36 +1,42 @@
-const KIMI_API_BASE = process.env.KIMI_API_BASE;
-const KIMI_API_KEY = process.env.KIMI_API_KEY;
-const KIMI_MODEL = process.env.KIMI_MODEL || 'kimi-k3';
+import assert from 'node:assert';
+
+const { KIMI_API_BASE, KIMI_API_KEY, KIMI_MODEL } = process.env;
 
 async function run() {
-  if (!KIMI_API_BASE || !KIMI_API_KEY) {
-    console.error('Missing KIMI_API_BASE or KIMI_API_KEY');
-    process.exit(1);
-  }
+  console.log('AI setup check starting...');
+  assert.ok(KIMI_API_BASE, 'Missing KIMI_API_BASE in .env');
+  assert.ok(KIMI_API_KEY, 'Missing KIMI_API_KEY in .env');
+  assert.ok(KIMI_MODEL, 'Missing KIMI_MODEL in .env');
 
-  const start = Date.now();
+  console.log('Testing connectivity to', KIMI_API_BASE, 'with model', KIMI_MODEL);
+
   try {
-    const res = await fetch(\`\${KIMI_API_BASE}/chat/completions\`, {
+    const res = await fetch(KIMI_API_BASE + '/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': \`Bearer \${KIMI_API_KEY}\`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + KIMI_API_KEY
       },
       body: JSON.stringify({
         model: KIMI_MODEL,
-        max_tokens: 50,
-        messages: [{ role: 'user', content: 'Say hello' }]
+        messages: [{ role: 'user', content: 'Say "hello" and nothing else.' }],
+        max_tokens: 10,
+        temperature: 0
       })
     });
 
-    const latency = Date.now() - start;
-    console.log(\`Status: \${res.status} \${res.statusText}\`);
-    console.log(\`Latency: \${latency}ms\`);
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error('API Error ' + res.status + ': ' + text);
+    }
 
-    const data = await res.text();
-    console.log('Reply:', data.substring(0, 200));
-  } catch (error) {
-    console.error('Error fetching:', error.message);
+    const data = await res.json();
+    const reply = data.choices?.[0]?.message?.content;
+    console.log('✓ Success! The model responded:', JSON.stringify(reply));
+
+  } catch (err) {
+    console.error('❌ AI Check failed:', err.message);
+    process.exit(1);
   }
 }
 
